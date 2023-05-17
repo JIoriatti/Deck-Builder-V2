@@ -147,7 +147,7 @@ export async function getStaticProps({params}){
     const card = await response.json();
     const response2 = await fetch("https://api.scryfall.com/symbology")
     const symbolsData = await response2.json();
-    const symbols = symbolsData.data
+    const symbols = symbolsData.data ?? null;
 
     return { props: { card, symbols } }
 }
