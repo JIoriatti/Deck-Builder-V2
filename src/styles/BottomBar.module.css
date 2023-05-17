@@ -1,0 +1,73 @@
+
+
+.bottomBar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: fixed;
+    width: calc(100vw - 5px);
+    /* left: 100px; */
+    bottom: 0;
+    min-height: 8em;
+    border-top: 1px solid grey;
+    
+    overflow-x: hidden;
+
+    /* overflow-y: visible; */
+    /* background-color: rgb(12, 28, 52); */
+    background: var(--themeColorLight);
+    /* background-color: rgb(35, 50, 73); */
+    box-shadow: -10px -1px 10px 0 rgb(11, 14, 28);
+
+    z-index: -1;
+}
+.spacer{
+    width: 25%;
+    height: 100%;
+    min-width: 18em;
+    margin-right: 0.5em;
+}
+.miniCardWrapper{
+    max-width: 70%;
+    /* max-height: 100%; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    /* max-width: 74.5%; */
+   /* overflow-x: hidden; */
+   /* max-height: 8em;*/
+   /* min-width: 75vw; */
+}
+.miniCard {
+    height: 7em;
+    cursor: pointer;
+    margin: 0 0.1em 0 0.1em;
+    
+    transition: all 0.2s ease;
+}
+.miniCard:hover{
+    transform:perspective(6.5cm) rotateX(-5deg) rotateY(10deg) scale(104%);
+    box-shadow: -1px 1px 5px 0 rgb(255, 255, 255) ;
+}
+
+
+@media (max-width: 990px){
+    .bottomBar{
+        all: unset;
+        position: static;
+        bottom: 0;
+        flex-grow: 1;
+        z-index: 10000;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+    .spacer{
+       
+    }
+    .miniCardWrapper{
+        width: 100%;
+    }
+    .miniCard{
+        height: 3.8em;
+    }
+}

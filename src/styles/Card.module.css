@@ -1,0 +1,94 @@
+.mainContainer{
+    height: 100%;
+    width: 100%;
+     /* min-width: 100vw; */
+    /* min-height: fit-content; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: space-between; */
+}
+.infoContainer{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 2em;
+    flex-grow: 1;
+    /* margin-top: 4em; */
+    /* flex-grow: 1; */
+    /* width: 80%; */
+    /* height: fit-content; */
+}
+.backLink{
+    margin: 7em 0 3em 0;
+    height: 3em;
+    width: 10em;
+}
+.backBtn{
+    width: 100%;
+    min-height: 2em;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: rgb(255, 255, 255);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.225);
+    border: 1px solid black;
+    cursor: pointer;
+}
+.imageContainer{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+.cardIcons{
+    margin: 1em 0.25em 0 0.25em;
+}
+.imageWrapper{
+    height: 365px;
+    width: 509px;
+    position: relative;
+}
+.legalitiesList{
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0 1em 0 1em;
+    align-self: flex-start;
+    font-size: 20px;
+}
+.legalitiesList h3,.seperator{
+    align-self: center;
+}
+.seperator{
+    display: block;
+    border-top: 1px solid rgba(227, 211, 167, 0.231);
+    width: 75%;
+    margin: 0.25em 0 0.25em 0;
+}
+.rightContainer{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+}
+.cardName,.setName,.cardDescription{
+    margin: 0.5em;
+}
+.cardName{
+    font-size: 32px;
+    font-weight: bold;
+}
+.setName{
+    font-size: 24px;
+}
+.cardDescription{
+    text-align: center;
+    width: 40em;
+    font-size: 18px;
+}
+.symbolList{
+    width: 5%;
+}

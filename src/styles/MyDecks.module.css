@@ -1,0 +1,45 @@
+.container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.deckCardContainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.cardList{
+    display: flex;
+    flex-direction: column;
+}
+.myDecks{
+    all: unset;
+    font-size: 48px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px 20px 5px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    transition: 0.3s all;
+}
+.deckContainer{
+    min-height: 300px;
+    max-height: 300px;
+    width: 30em;
+    margin: 2em 0 0 0;
+    overflow-y:auto;
+}
+.myDecks:focus{
+    background-color: darkgoldenrod;
+    outline: 2px solid black;
+    color: black;
+}
+.deckName{
+    margin: 1em;
+    text-align: center;
+    cursor: pointer;
+}

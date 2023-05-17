@@ -1,0 +1,15 @@
+.popUp {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(173, 195, 230);
+    min-height: fit-content;
+    height: 100px;
+    width: 250px;
+    min-width: fit-content;
+    position: absolute;
+    top: 90%;
+
+    z-index: 1000;
+}
+
+

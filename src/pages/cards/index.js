@@ -1,46 +1,33 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import styles from '../styles/Cards.module.css'
+import styles from '../../styles/Cards.module.css'
 import Header from "@/components/Header";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion"
 import Head from "next/head";
 import SideBar from "@/components/SideBar";
 import DynamicHeader from "@/components/DynamicHeader";
 import { ACTIONS } from "utils/actions";
 import { useStateContext, useDispatchContext } from "utils/ReducerContext";
+import Arrow from "@/components/Arrow";
 import { Suspense } from "react";
-import useDebounce from "utils/useDebounce";
-import { useRouter } from "next/router";
-import SearchedCardsList from "@/components/SearchedCardsList";
 
 
-export default function Home({initialCards}) {
+export default function Cards({ cards }) {
     const state = useStateContext();
     const dispatch = useDispatchContext();
-    const [cards, setCards] = useState([]);
-    const [lastSearchQuery, setLastSearchQuery] = useState('')
-
-    const router = useRouter();
-    const debouncedSearch = useDebounce(state.searchInput, 500);
     
-
-    //temporary redirect for deployment
-    useEffect(()=>{
-        window.location.replace('/cards/search?q=')
-    },[])
-
 
     function reCenterCardOnScreen(target) {
         let TIMER;
-        console.log('clickedworking');
+        console.log(target);
         if (!state.mediaState.matches && state.isExpanded) {
             TIMER = 800;
         }
         else {
             TIMER = 400;
         }
-        if(target){
+        if(target && !state.searchInput){
             setTimeout(() => {
                 const rect = target.getBoundingClientRect();
                 if (rect.top < 70 || rect.y > 700) {
@@ -52,9 +39,9 @@ export default function Home({initialCards}) {
     }
     const handleDynamicHeader = () => {
         let offset = (state.scrollYPosition - 120) / 1.5;
-        // if (state.searchInput) {
-        //     return { top: '0' }
-        // }
+        if (state.searchInput) {
+            return { top: '0' }
+        }
         return state.scrollYPosition >= 120 ? { top: '0' } : { top: offset }
     }
     const handleScroll = (e) => {
@@ -118,50 +105,13 @@ export default function Home({initialCards}) {
         dispatch({ type: ACTIONS.MEDIA_STATE, payload: { matches: window.matchMedia("(max-width: 990px)").matches } })
     }, [])
 
-    useEffect(()=>{
-        async function fetchUserInput(userInput) {
-            try {
-                if(userInput != ''){
-                    console.log(encodeURIComponent(userInput))
-                    const response = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(userInput)}`)
-                    if(response.ok){
-                        const searchResult = await response.json();
-                        setCards(searchResult.data)
-                    }
-                }
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        if(debouncedSearch){
-            fetchUserInput(debouncedSearch);
-        }
-        if(debouncedSearch === ''){
-            setCards([]);
-        }
-    },[debouncedSearch])
-    useEffect(()=>{
-        if(state.searchInput){
-          router.replace(`/search?q=${encodeURIComponent(state.searchInput)}`, undefined, {shallow: true, scroll: false})
-          setLastSearchQuery(router.query.q)
-        }
-        // if(!state.searchInput){
-        //   router.replace('/', undefined, {shallow: true, scroll: false})
-        // }
-    },[state.searchInput,router])
-  //   useEffect(()=>{
-  //     if(router.query.q){
-  //         dispatch({type: ACTIONS.SEARCH_INPUT, payload: router.query.q})
-  //     }
-  // },[])
-
-
     return (
         <>
             <Head>
                 <title>DeckBuilder</title>
             </Head>
             <Header />
+            {/* <Arrow /> */}
             <AnimatePresence>
                 {state.scrollYPosition > 50 &&
                     <DynamicHeader
@@ -183,38 +133,36 @@ export default function Home({initialCards}) {
                         className={styles.cardsContainer + ' ' + (state.isExpanded ? styles.padBot : '')}
                         id="cardsContainer"
                         onClick={handleCardClick}
-                        initial={false}
                     >
-                                {/* {state.searchInput && cards.length>1 ? cards.map((card) => {
-                                    return <div
-                                        className={styles.card}
-                                        key={card.id}>
-                                        <LazyLoadImage
-                                            // fill={'contain'}
-                                            effect='blur'
-                                            height={300}
-                                            width={210}
-                                            placeholderSrc={card.image_uris?.border_crop || card.card_faces[0].image_uris.border_crop}
-                                            className={handleCardSelectedStylesToggle(card)}
-                                            data-card="card"
-                                            data-name={card.name}
-                                            data-setname={card.set_name}
-                                            data-cmc={card.cmc}
-                                            data-desc={card.oracle_text}
-                                            data-id={card.id}
-                                            data-back={card.card_faces?.image_uris ? card.card_faces[1].image_uris : null}
-                                            data-doublesided={card.backImage ? 'true' : 'false'}
-                                            src={card.image_uris?.border_crop || card.card_faces[0].image_uris.border_crop}
-                                            alt={card.name}
-                                            key={card.name} />
-                                    </div>
-                                }) : <div>No results found.</div>} */}
-                                {state.searchInput ?
-                                <SearchedCardsList cards={cards} styles={styles} handleCardSelectedStylesToggle={handleCardSelectedStylesToggle}/>
-                                  
-                                : 
-                                <>
-                                    {initialCards.map((card) => {
+                        {state.searchInput ?
+                            <>{cards.filter((card) => {
+                                return state.searchInput.toLowerCase() === '' ?
+                                    card :
+                                    card.name.toLowerCase().includes(state.searchInput);
+                            }).map((card) => {
+                                return <div
+                                    className={styles.card}
+                                    key={card.id}>
+                                    <LazyLoadImage
+                                        effect="blur"
+                                        className={handleCardSelectedStylesToggle(card)}
+                                        data-card="card"
+                                        data-name={card.name}
+                                        data-setname={card.set_name}
+                                        data-cmc={card.cmc}
+                                        data-desc={card.description}
+                                        data-id={card.id}
+                                        data-back={card.backImage}
+                                        data-doublesided={card.backImage ? 'true' : 'false'}
+                                        src={card.image}
+                                        alt={card.name}
+                                        key={card.name}
+                                    />
+                                </div>
+                            })}
+                            </>
+                            : <>
+                                {cards.map((card) => {
                                     return <div
                                         className={styles.card}
                                         key={card.id}>
@@ -235,8 +183,7 @@ export default function Home({initialCards}) {
                                             alt={card.name}
                                             key={card.name} />
                                     </div>
-                                })} 
-                                </>}
+                                })}</>}
                     </motion.div>
                 </div>
             </Suspense>
@@ -269,6 +216,6 @@ export async function getStaticProps(){
     const symbols = symbolsData.data
 
     return { 
-        props: { initialCards: filteredCardPropsArray, symbols } 
+        props: { cards: filteredCardPropsArray, symbols } 
     }
 }

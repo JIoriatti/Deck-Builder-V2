@@ -1,0 +1,115 @@
+.mainContainer{
+    height: max-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.header{
+    top: 0;
+    /* right: 1%; */
+    position: static;
+    height: 4em;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em 3em 1em 5em;
+    align-items: center;
+    /* overflow: visible; */
+    z-index: 10;
+    background: linear-gradient(rgb(12, 17, 31), 10%, var(--themeColorLight));
+}
+.rightContainer{
+    display: flex;
+    min-width: max-content;
+    /* margin-right: 2em; */
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+}
+.seperator{
+    margin-top: 0.5em;
+    width: 95%;
+    border-bottom: 1px solid rgba(227, 211, 167, 0.32);
+}
+.psuedoItem{
+    flex: 1;
+}
+.searchFilterContainer{
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    height: 100%;
+    align-items: center;
+}
+.appName{
+    font-size: 24px;
+    font-weight: bold;
+    color: rgb(227, 211, 167);
+    order: 4;
+    margin-left: 1em;
+    padding-right: 3em;
+}
+
+.iconContainer{
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.385);
+    border: 1px solid rgb(227, 211, 167);
+    cursor: pointer;
+    order: 4;
+    margin-right: 7em;
+
+    transition: 0.1s all ease-in-out;
+}
+.iconContainer:hover{
+    transform: scale(110%);
+    box-shadow: 0 0 10px 1px rgb(255, 255, 255),
+    0 0 10px 1px inset rgb(255, 255, 255)
+}
+
+.treasureIcon{
+    height: 25px;
+    width: 25px;
+    background-image:url(../../public/icons8-treasure-chest-40.png);
+    background-size: cover;
+}
+
+.hide{
+    display: none;
+}
+
+/* media queries */
+@media (max-width: 990px){
+    .mainContainer{
+        flex-wrap: wrap;
+    }
+    .header{
+        justify-content: center;
+        padding: 0;
+    }
+    
+    .navigation{
+        width: fit-content;
+    }
+    .rightContainer{
+        width: max-content;
+    }
+}
+
+@media (max-width: 475px){
+    .rightContainer{
+        align-items: center;
+        height: 100%;
+        justify-content: space-evenly;
+    }
+    .listItem{
+        margin: unset;
+    }
+}

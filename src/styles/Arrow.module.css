@@ -1,0 +1,30 @@
+.arrowContainer{
+    position: fixed;
+    top: 50%;
+    right: 0;
+    height: 55px;
+    width: 55px;
+    background-image: url('../../public/arrow-top3-svgrepo-com.png');
+    background-size: 175%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.592);
+
+    transition: 0.2s ease-in-out;
+}
+.arrowContainer:hover{
+    transform: scale(105%);
+    box-shadow: inset 0 0 50px white;
+}
+.deckDropContainer{
+    position: fixed;
+    top: 50%;
+    right: -100px;
+    height: 200px;
+    width: 150px;
+    background-color: rgba(0, 0, 0, 0.549);
+    z-index: 100;
+}

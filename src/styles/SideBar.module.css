@@ -1,0 +1,356 @@
+.sideBar {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    min-width: 18em;
+    position: fixed;
+    /* min-height: fit-content; */
+    bottom: 0;
+    left: 0;
+    top: 0;
+    /* padding: 10em 0 0 0; */
+    align-items: center;
+    /* justify-content: space-between; */
+    /* background-color:  rgb(12, 28, 52); */
+    background: var(--themeColorLight);
+    /* background: linear-gradient(0.25turn,rgb(12, 28, 52), rgb(20, 41, 73),rgb(12, 28, 52)); */
+    /* background-color:  rgb(35, 50, 73); */
+    box-shadow: 1px 0 10px 0 rgb(11, 14, 28);
+    
+    z-index: 1000;
+
+    transition: width 0.25s linear;
+}
+.cardInfoContainer{
+    /* height: 80%; */
+    width: 100%;
+    padding: 5em 1em 2em 1em;
+    overflow-y: scroll;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+.dualSidedOptions{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 0.5em 0 0.5em;
+    gap: 1em;
+    align-self: flex-start;
+    width: fit-content;
+    min-height: 1em;
+    position: absolute;
+    top: -10%;
+    left: -2%;
+}
+.vertSeperator{
+    border-left: 1px solid #e3d3a74d;
+    height: 20px;
+}
+.turnCard,.flipCard{
+    all: unset;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-size: contain;
+
+    transition: 0.1s all ease-in-out;
+}
+.turnCard{
+    background-image: url('../../public/refresh-svgrepo-com\ \(1\).png');
+}
+.flipCard{
+    background-image: url('../../public/twinheadarrow-svgrepo-com.png');
+}
+.turnCard:hover,.flipCard:hover{
+    box-shadow: inset 0 0 10px white;
+}
+.mobileImageNameSetNameWrapper{
+    /* height: min-content;
+    width: min-content; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.imageContainer{
+    /* max-height: 30em; */
+    max-width: 20em;
+    min-width: 15em;
+    position: relative;
+}
+.cardImage{
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+
+.seperatorLrg,.seperatorMed,.seperatorSml,.seperatorVSml{
+    border-top: 1px solid rgba(227, 211, 167, 0.231);
+}
+.seperatorLrg{
+    width: 75%;
+    margin-top: 1em;
+}
+.seperatorMed,.seperatorSml,.seperatorVSml{
+    margin-top: 0.05em;
+}
+.seperatorMed{
+    width: 30%;
+}
+.seperatorSml{
+    width: 15%;
+}
+.seperatorVSml{
+    width: 5%;
+}
+.cardName,.setName,.description,.cmc {   
+    margin-top: 2em;
+}
+.description{
+    line-height: 150%;
+}
+.cardName,.setName{
+    text-align: center;
+}
+.bottomContainer{
+    display: flex;
+    align-items: top;
+    min-height: 8em;
+    border-top: 1px solid grey;
+    width: 100%;
+    /* background-color: rgb(12, 28, 52); */
+    background: var(--themeColorLight);
+    /* background: linear-gradient(0.5turn, rgb(20, 41, 73),rgb(12, 28, 52)); */
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 0 10px 0 rgb(11, 14, 28);
+    z-index: 50;
+}
+.stickyBottom{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    padding: 1em 0 1em 1em;
+}
+.addCardDeckContainer,.dismissExpandContainer{
+    display: flex;
+    justify-content: space-around;
+    width: 10em;
+    min-width: 2em;
+}
+.rightSideContainer{
+    display: flex;
+    justify-content: flex-end;
+}
+.addToDeck,.deckList,.dismiss,.expand{
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1px solid   rgb(227, 211, 167);
+    box-shadow:  0 0 10px 0 rgb(11, 14, 28);
+    cursor: pointer;
+
+    transition: 0.1s all ease-in-out;
+}
+.addToDeck{
+    background-image: url('../../public/plus-svgrepo-com\ \(1\).png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: 50%;
+}
+.deckList{
+    background-image: url('../../public/hamburger-svgrepo-com\ \(1\).png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-size: 50%;
+}
+.dismiss{
+    background-image: url('../../public/cross-svgrepo-com\ \(5\).png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.expand{
+    background-image: url('../../public/chevron-bottom-svgrepo-com\ \(1\).png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.addToDeck:hover {
+    background-color: rgba(0, 128, 0, 0.541);
+    box-shadow: 0 0 5px 0 rgb(255, 255, 255);
+}
+.deckList:hover {
+    background-color: rgba(255, 255, 255, 0.541);
+    box-shadow: 0 0 5px 0 rgb(255, 255, 255);
+}
+.dismiss:hover{
+    background-color: rgba(128, 0, 0, 0.541);
+    box-shadow: 0 0 5px 0 rgb(255, 255, 255);
+}
+.expand:hover{
+    background-color: rgba(255, 255, 255, 0.541);
+    box-shadow: 0 0 5px 0 rgb(255, 255, 255);
+}
+.door{
+    border-right: 1px solid rgba(227, 211, 167, 0.54);
+    height: 100%;
+    width: 1em;
+}
+.cardAddedDropDown{
+    position: absolute;
+    top: 5px;
+    background-color: rgb(12, 28, 52);
+    font-size: 20px;
+    padding: 0.25em 0.5em 0.25em 0.5em;
+    border-radius: 5px;
+    z-index: 1000;
+    border: 1px solid rgba(227, 211, 167, 0.54);;
+}
+
+@media (max-width: 990px){
+    .sideBar{
+        all: unset;
+        position: fixed;
+        bottom: 0;
+        z-index: 1000;
+        height: 20em;
+        width: 100%;
+        background: var(--themeColorLight);
+        box-shadow: -10px -5px 10px 0 rgb(11, 14, 28);
+        border-top: 1px solid rgba(227, 211, 167, 0.447);
+    }
+    .cardInfoContainer{
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 0 0 0.5em;
+        overflow: hidden;
+    }
+    .mobileImageNameSetNameWrapper{
+        flex-direction: row;
+        height: 95%;
+        /* width: 100%; */
+        align-items: center;
+        justify-content: space-around;
+    }
+    .imageContainer{
+        width: 175px;
+        min-width: 175px;
+        height: 100%;
+    }
+    .cardImage{
+        height: 100%;
+        width: 100%;
+    }
+    .mobileWrapper{
+        display: flex;
+        flex-direction: column;
+        width: max-content;
+        max-width: 15em;
+        align-items: center;
+        padding: 0 1em 0 1em;
+        /* flex-grow: 1; */
+    }
+    .cardName,.setName{
+        margin-top: 0;
+    }
+    .description{
+        display: flex;
+        align-items: center;
+        margin-top: 0;
+        padding: 1em 0.25em 1em 0.25em;
+        height: 100%;
+    }
+    .bottomContainer{
+        min-height: unset;
+    }
+    .stickyBottom{
+        height: max-content;
+        padding: 0.25em 0 0.25em 0;
+    }
+    .addCardDeckContainer{
+        max-width: 5.5em;
+        min-width: 5.5em;
+        padding-right: 0.5em;
+    }
+    .addToDeck,.deckList,.dismiss,.expand{
+        height: 30px;
+        width: 30px;
+    }
+    .rightSideContainer{
+        width: max-content;
+        /* width: max-content; */
+        border-left: 2px solid rgba(227, 211, 167, 0.447);
+    }
+    .dismissExpandContainer{
+        width: fit-content;
+        padding-left: 1em;
+        justify-content: flex-end;
+        padding-right: 1em;
+        justify-self: center;
+    }
+    .addCardDeckContainer{
+        border-right: 2px solid rgba(227, 211, 167, 0.447);
+    }
+    .mobileTurnCardCMCWrapper{
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+    }
+    .cmc{
+        margin: 0;
+    }
+}
+/* @media (max-width: 800px){
+    .cardInfoContainer{
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+} */
+@media (max-width: 800px){
+    .sideBar{
+        height: 20em;
+        display: flex;
+        flex-direction: column;
+    }
+    .cardInfoContainer{
+        flex-direction: column;
+        height: 100%;
+        /* bottom: 100px; */
+        padding: 0 0 0 0;
+        overflow-y: scroll;
+        /* padding-top: 4em; */
+        /* height: fit-content; */
+    }
+    .mobileImageNameSetNameWrapper{
+        padding: 15em 0.5em 0 0.5em;
+        height: 30em;
+    }
+    .mobileWrapper{
+        /* flex-grow: 1;    */
+        height: auto;
+        width: unset;
+        /* min-width: 5em; */
+    }
+    .cardImage{
+       height: 100%;
+       width: 100%;
+    }
+    .description{
+        flex-grow: 1;
+        padding: 2em 1em 2em 1em;
+    }
+}
+
+

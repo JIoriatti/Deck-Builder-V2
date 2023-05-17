@@ -1,8 +1,8 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import styles from '../styles/Cards.module.css'
+import styles from '../../../styles/Cards.module.css'
 import Header from "@/components/Header";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion"
 import Head from "next/head";
 import SideBar from "@/components/SideBar";
@@ -13,23 +13,25 @@ import { Suspense } from "react";
 import useDebounce from "utils/useDebounce";
 import { useRouter } from "next/router";
 import SearchedCardsList from "@/components/SearchedCardsList";
+import getAllCards from "utils/getAllCards";
+import CardsDisplay from "@/components/CardsDisplay";
+import { useInfiniteQuery, useQuery, useQueryClient } from "react-query";
 
 
-export default function Home({initialCards}) {
+
+export default function SearchCards({initialCards}) {
     const state = useStateContext();
     const dispatch = useDispatchContext();
     const [cards, setCards] = useState([]);
     const [lastSearchQuery, setLastSearchQuery] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
+    
+
+    const queryClient = useQueryClient();
 
     const router = useRouter();
     const debouncedSearch = useDebounce(state.searchInput, 500);
     
-
-    //temporary redirect for deployment
-    useEffect(()=>{
-        window.location.replace('/cards/search?q=')
-    },[])
-
 
     function reCenterCardOnScreen(target) {
         let TIMER;
@@ -50,13 +52,7 @@ export default function Home({initialCards}) {
         }
         return;
     }
-    const handleDynamicHeader = () => {
-        let offset = (state.scrollYPosition - 120) / 1.5;
-        // if (state.searchInput) {
-        //     return { top: '0' }
-        // }
-        return state.scrollYPosition >= 120 ? { top: '0' } : { top: offset }
-    }
+
     const handleScroll = (e) => {
         dispatch({ type: ACTIONS.SCROLL_Y_POSITION, payload: e.currentTarget.pageYOffset })
     }
@@ -95,6 +91,7 @@ export default function Home({initialCards}) {
             return styles.cardImage;
         }
     }
+    
 
     useEffect(() => {
         if (state.isCardClicked) {
@@ -110,25 +107,36 @@ export default function Home({initialCards}) {
     }, [state.isCardClicked])
 
     useEffect(() => {
+        if(router.query.q){
+            dispatch({type: ACTIONS.SEARCH_INPUT, payload: router.query.q})
+        }
+
+        dispatch({ type: ACTIONS.MEDIA_STATE, payload: { matches: window.matchMedia("(max-width: 990px)").matches } })
+
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, [])
 
-    useEffect(() => {
-        dispatch({ type: ACTIONS.MEDIA_STATE, payload: { matches: window.matchMedia("(max-width: 990px)").matches } })
-    }, [])
 
     useEffect(()=>{
         async function fetchUserInput(userInput) {
             try {
+                setIsLoading(true);
                 if(userInput != ''){
                     console.log(encodeURIComponent(userInput))
                     const response = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(userInput)}`)
                     if(response.ok){
                         const searchResult = await response.json();
                         setCards(searchResult.data)
+                        dispatch({type: ACTIONS.NO_SEARCH_RESULT, payload: false})
                     }
+                    if(!response.ok){
+                        setCards([]);
+                        dispatch({type: ACTIONS.NO_SEARCH_RESULT, payload: true})
+                    }
+                    setIsLoading(false);
                 }
+                
             } catch (err) {
                 console.log(err)
             }
@@ -141,34 +149,79 @@ export default function Home({initialCards}) {
         }
     },[debouncedSearch])
     useEffect(()=>{
-        if(state.searchInput){
-          router.replace(`/search?q=${encodeURIComponent(state.searchInput)}`, undefined, {shallow: true, scroll: false})
+          dispatch({type: ACTIONS.NO_SEARCH_RESULT, payload: false})
+          router.replace(`/cards/search?q=${encodeURIComponent(state.searchInput)}`, undefined, {shallow: true, scroll: false})
           setLastSearchQuery(router.query.q)
+    },[state.searchInput])
+
+
+  
+
+    const fetchCards = async (page=1)=>{
+        const response = await fetch(`https://api.scryfall.com/cards/search?q=c%3Awhite+mv%3D1&page=${page}`)
+        return response.json();
+    } 
+    const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isFetchingPreviousPage, hasPreviousPage, fetchPreviousPage } = useInfiniteQuery(
+        ['cards'], 
+    ({pageParam})=> fetchCards(pageParam)  
+    ,
+    {
+        getNextPageParam: (lastPage, allPages) => {
+            const nextPage = allPages.length + 1;
+            return lastPage.has_more ? nextPage : undefined;
         }
-        // if(!state.searchInput){
-        //   router.replace('/', undefined, {shallow: true, scroll: false})
-        // }
-    },[state.searchInput,router])
-  //   useEffect(()=>{
-  //     if(router.query.q){
-  //         dispatch({type: ACTIONS.SEARCH_INPUT, payload: router.query.q})
-  //     }
-  // },[])
+    });
+    
+    // useEffect(()=>{
+    //     console.log(data)
+    //     let fetching = false;
+    //     const handleScroll = async (e) =>{
+    //         const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
 
+    //         // if(!fetching && scrollHeight - clientHeight >= scrollTop*6){
+    //         //     console.log('hi')
+                
+    //         //     fetching = true;
+    //         //     if(hasPreviousPage){
+    //         //         await fetchPreviousPage();
+    //         //     }
+    //         //     fetching = false;
+    //         // }
 
+    //         if(!fetching && (scrollHeight - scrollTop <= (clientHeight * 2))){
+    //             fetching = true;
+    //             if(hasNextPage){
+    //                 await fetchNextPage();
+    //             }
+    //             fetching = false;
+                
+    //         //     if(data.pages.length>2){
+    //         //         queryClient.setQueryData(['cards'], (data) => {
+                    
+    //         //             data.pages.slice(1);
+    //         //             data.pageParams.slice(1);
+    //         //    })
+    //         //     }
+                
+    //         }
+    //     }
+    //     document.addEventListener('scroll', handleScroll);
+
+    //     return ()=> document.removeEventListener('scroll', handleScroll);
+    // },[])
+
+    
+// console.log(data);
     return (
         <>
             <Head>
                 <title>DeckBuilder</title>
             </Head>
             <Header />
-            <AnimatePresence>
-                {state.scrollYPosition > 50 &&
-                    <DynamicHeader
-                        position={handleDynamicHeader()}
-                    />
-                }
-            </AnimatePresence>
+             
+            <DynamicHeader
+                // position={handleDynamicHeader()}
+            />
             <SideBar
                 reCenterCardOnScreen={reCenterCardOnScreen}
             />
@@ -185,57 +238,38 @@ export default function Home({initialCards}) {
                         onClick={handleCardClick}
                         initial={false}
                     >
-                                {/* {state.searchInput && cards.length>1 ? cards.map((card) => {
-                                    return <div
-                                        className={styles.card}
-                                        key={card.id}>
-                                        <LazyLoadImage
-                                            // fill={'contain'}
-                                            effect='blur'
-                                            height={300}
-                                            width={210}
-                                            placeholderSrc={card.image_uris?.border_crop || card.card_faces[0].image_uris.border_crop}
-                                            className={handleCardSelectedStylesToggle(card)}
-                                            data-card="card"
-                                            data-name={card.name}
-                                            data-setname={card.set_name}
-                                            data-cmc={card.cmc}
-                                            data-desc={card.oracle_text}
-                                            data-id={card.id}
-                                            data-back={card.card_faces?.image_uris ? card.card_faces[1].image_uris : null}
-                                            data-doublesided={card.backImage ? 'true' : 'false'}
-                                            src={card.image_uris?.border_crop || card.card_faces[0].image_uris.border_crop}
-                                            alt={card.name}
-                                            key={card.name} />
-                                    </div>
-                                }) : <div>No results found.</div>} */}
                                 {state.searchInput ?
-                                <SearchedCardsList cards={cards} styles={styles} handleCardSelectedStylesToggle={handleCardSelectedStylesToggle}/>
+                                <SearchedCardsList cards={cards} styles={styles} handleCardSelectedStylesToggle={handleCardSelectedStylesToggle} isLoading={isLoading}/>
                                   
                                 : 
                                 <>
-                                    {initialCards.map((card) => {
-                                    return <div
-                                        className={styles.card}
-                                        key={card.id}>
-                                        <LazyLoadImage
-                                            height={"100%"}
-                                            width={'100%'}
-                                            effect="blur"
-                                            className={handleCardSelectedStylesToggle(card)}
-                                            data-card="card"
-                                            data-name={card.name}
-                                            data-setname={card.set_name}
-                                            data-cmc={card.cmc}
-                                            data-desc={card.description}
-                                            data-id={card.id}
-                                            data-back={card.backImage}
-                                            data-doublesided={card.backImage ? 'true' : 'false'}
-                                            src={card.image}
-                                            alt={card.name}
-                                            key={card.name} />
-                                    </div>
-                                })} 
+                                    {/* {initialCards.map((card) => {
+                                        return <div
+                                                    className={styles.card}
+                                                    key={card.id}
+                                                >
+                                                    <LazyLoadImage
+                                                        wrapperClassName={styles.cardImageWrapper}
+                                                        effect="blur"
+                                                        loading="lazy"
+                                                        className={handleCardSelectedStylesToggle(card)}
+                                                        data-card="card"
+                                                        data-name={card.name}
+                                                        data-setname={card.set_name}
+                                                        data-cmc={card.cmc}
+                                                        data-desc={card.description}
+                                                        data-id={card.id}
+                                                        data-back={card.backImage}
+                                                        data-doublesided={card.backImage ? 'true' : 'false'}
+                                                        src={card.image}
+                                                        alt={card.name}
+                                                        key={card.name} 
+                                                    />
+                                                </div>
+                                    })}  */}
+                                {data.pages.map((page, i) => {
+                                    return <CardsDisplay key={i} page={page} />
+                                })}
                                 </>}
                     </motion.div>
                 </div>
@@ -245,6 +279,7 @@ export default function Home({initialCards}) {
     )
 }
 
+//&page=2  for page 2, etc.
 const WHITE_CARD_URL = "https://api.scryfall.com/cards/search?q=c%3Awhite+mv%3D1";
 const SYMBOL_URL = "https://api.scryfall.com/symbology"
 //Filtering out unwanted card object properties from the API to reduce amount of data being stored into props
@@ -272,3 +307,42 @@ export async function getStaticProps(){
         props: { initialCards: filteredCardPropsArray, symbols } 
     }
 }
+// export async function getStaticProps(){
+
+//     const getAllCards = (url, nextPageUrl, prevResponse=[])=>{
+//         return fetch(url)
+//                 .then(response=> {return {data} = response.json()})
+//                 .then(newResponse=> {
+//                     const response = [...prevResponse, ...newResponse];
+
+//                     if(newResponse.next_page){
+//                         nextPageUrl = newResponse.next_page
+//                         return getAllCards(url, nextPageUrl, response);
+//                     }
+//                     console.log(response);
+//                     return response;
+//                 });
+//     }
+
+//     const cards = getAllCards(WHITE_CARD_URL);
+    
+//     let filteredCardPropsArray = []
+//     for(let i=0; i<cards.length; i++){
+//         filteredCardPropsArray[i] = {
+//             name: cards.data[i].name,
+//             id : cards.data[i].id,
+//             set_name: cards.data[i].set_name,
+//             image: cards.data[i].image_uris?.border_crop || cards.data[i].card_faces[0].image_uris.border_crop,
+//             backImage: cards.data[i].card_faces?.image_uris? cards.data[i].card_faces[1].image_uris : null,
+//             cmc: cards.data[i].cmc,
+//             description: cards.data[i].card_faces? cards.data[i].card_faces[0].oracle_text + ' ' + cards.data[i].card_faces[1].oracle_text : cards.data[i].oracle_text
+//         };
+//     };
+//     const symbolResponse = await fetch(SYMBOL_URL)
+//     const symbolsData = await symbolResponse.json();
+//     const symbols = symbolsData.data
+
+//     return { 
+//         props: { initialCards: filteredCardPropsArray, symbols } 
+//     }
+// }
