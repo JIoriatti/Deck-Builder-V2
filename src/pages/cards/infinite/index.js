@@ -42,7 +42,6 @@ export default function Infinite(){
         return ()=> document.removeEventListener('scroll', handleScroll);
     },[])
 
-    console.log(data)
     return (
         <>
             <Head>

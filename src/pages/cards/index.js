@@ -20,7 +20,6 @@ export default function Cards({ cards }) {
 
     function reCenterCardOnScreen(target) {
         let TIMER;
-        console.log(target);
         if (!state.mediaState.matches && state.isExpanded) {
             TIMER = 800;
         }
@@ -67,7 +66,6 @@ export default function Cards({ cards }) {
             if (e.target.dataset.name != state.selectedCard) {
                 dispatch({ type: ACTIONS.SET_LAST_SELECTED_CARD, payload: state.selectedCard })
             }
-            console.log(state.selectedCardDetails)
         }
         reCenterCardOnScreen(e.target);
     }

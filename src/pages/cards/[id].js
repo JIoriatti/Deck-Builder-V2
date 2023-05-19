@@ -20,9 +20,7 @@ export default function Card({ card, symbols }){
         }
         return list;
     }
-    useEffect(()=>{
-        console.log(objectMapper(card.legalities))
-    },[])
+
     return(
         <>  
             <div className={styles.mainContainer}>

@@ -17,7 +17,6 @@ export default function DeckList (){
         //added getSession due to session object being undefined on page load/hard reload
         //may not be needed for production as hot reload doesnt cause session to be undefined
         const session = await getSession();
-            console.log('working')
             const userId = session.user.id
             const response = await fetch(`/api/decks/${userId}`,{
                 method: 'GET',

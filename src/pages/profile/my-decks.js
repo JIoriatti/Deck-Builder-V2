@@ -14,7 +14,6 @@ export default function MyDecks(){
     const fetchUserDecks = async ()=>{
         let deckArray =[];
         const session = await getSession();
-        console.log(session)
         const response = await fetch(`/api/decks/${session.user.id}`,{
             method: 'GET',
             headers: {
@@ -22,7 +21,6 @@ export default function MyDecks(){
             },
         })
         const fetchedDecks = await response.json();
-        console.log(fetchedDecks);
         for(let deck of fetchedDecks.decks){
             deckArray.push({name: deck.name, id: deck.id});
         }
@@ -38,7 +36,6 @@ export default function MyDecks(){
             },
         })
         const cardsInDeck = await response.json();
-        console.log(await cardsInDeck);
         if(cardsInDeck.cards.length>0){
             for(let card of cardsInDeck.cards){
                 cardsArray = [...cardsArray, card]

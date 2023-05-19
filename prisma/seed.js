@@ -11,12 +11,10 @@ async function main(){
             .then(response =>response.json())
             .then(newResponse => {
                 const response = [...prevResponse, ...newResponse.data];
-
                 if (newResponse.next_page) {
                     nextPageUrl = newResponse.next_page
                     return getAllCards(url, nextPageUrl, response);
                 }
-                console.log(response);
                 return response;
             }).catch(err => console.log(err));
     }
@@ -33,7 +31,6 @@ async function main(){
     const DBresponse = await prisma.card.createMany({
         data: filteredPropsCards,
     })
-    console.log(DBresponse);
 }
 main().then(async()=>{
     await prisma.$disconnect();

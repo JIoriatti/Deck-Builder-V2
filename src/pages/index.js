@@ -33,7 +33,6 @@ export default function Home({initialCards}) {
 
     function reCenterCardOnScreen(target) {
         let TIMER;
-        console.log('clickedworking');
         if (!state.mediaState.matches && state.isExpanded) {
             TIMER = 800;
         }
@@ -80,7 +79,6 @@ export default function Home({initialCards}) {
             if (e.target.dataset.name != state.selectedCard) {
                 dispatch({ type: ACTIONS.SET_LAST_SELECTED_CARD, payload: state.selectedCard })
             }
-            console.log(state.selectedCardDetails)
         }
         reCenterCardOnScreen(e.target);
     }
@@ -122,7 +120,6 @@ export default function Home({initialCards}) {
         async function fetchUserInput(userInput) {
             try {
                 if(userInput != ''){
-                    console.log(encodeURIComponent(userInput))
                     const response = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(userInput)}`)
                     if(response.ok){
                         const searchResult = await response.json();

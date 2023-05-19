@@ -206,7 +206,6 @@ export default function SideBar ({reCenterCardOnScreen}) {
                                     title={state.isExpanded? "Collapse Card-History" : "Expand Card-History"}
                                     id="expand"
                                     onClick={() => {
-                                        console.log('expanded: ', state.isExpanded);
                                         dispatch({type: ACTIONS.SET_EXPANDED})
                                     }}
                                 >

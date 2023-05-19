@@ -8,7 +8,6 @@ const getAllCards = (url, nextPageUrl, prevResponse = []) => {
                 nextPageUrl = newResponse.next_page
                 return getAllCards(url, nextPageUrl, response);
             }
-            console.log(response);
             return response;
         }).catch(err => console.log(err));
 }

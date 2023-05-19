@@ -10,7 +10,6 @@ export default function SignIn (){
             password: userInfo.password,
             redirect: false,
         })
-        console.log(response);
     }
     return (
         <>
