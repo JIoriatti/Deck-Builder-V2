@@ -16,11 +16,11 @@ export default function App({ Component, pageProps }) {
   return (
     <QueryClientProvider client={client}>
       <React.Suspense fallback='Loading...'>
-        <SessionProvider session={pageProps.session}>
+        {/* <SessionProvider session={pageProps.session}> */}
           <ReducerProvider>
             <Component {...pageProps} />
           </ReducerProvider>
-        </SessionProvider>
+        {/* </SessionProvider> */}
       </React.Suspense>
     </QueryClientProvider>
   ) 

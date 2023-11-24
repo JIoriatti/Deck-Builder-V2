@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ACTIONS } from 'utils/actions';
 
 export default function DeckList (){
-    const {data: session, status} = useSession({required: true});
+    // const {data: session, status} = useSession({required: true});
     const [userDecks, setUserDecks] = useState([]);
     const [selectedDeck, setSelectedDeck] = useState({});
     const state = useStateContext();
@@ -16,20 +16,20 @@ export default function DeckList (){
         let deckArray =[];
         //added getSession due to session object being undefined on page load/hard reload
         //may not be needed for production as hot reload doesnt cause session to be undefined
-        const session = await getSession();
-            const userId = session.user.id
-            const response = await fetch(`/api/decks/${userId}`,{
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
-            const deckData = await response.json();
-            for(let deck of deckData.decks){
-                deckArray.push({name: deck.name, id: deck.id});
-            }
-            setUserDecks(deckArray);
-            return;
+        // const session = await getSession();
+            // const userId = session.user.id
+            // const response = await fetch(`/api/decks/${userId}`,{
+            //     method: 'GET',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            // });
+            // const deckData = await response.json();
+            // for(let deck of deckData.decks){
+            //     deckArray.push({name: deck.name, id: deck.id});
+            // }
+            // setUserDecks(deckArray);
+            // return;
   
     }
     const handleDeckClickStyles = (deck)=>{
@@ -48,8 +48,8 @@ export default function DeckList (){
     return (
         <>
             <AnimatePresence>
-                {status === 'authenticated' && state.isViewDeckListClicked &&
-                    <motion.div
+                {/* {status === 'authenticated' && state.isViewDeckListClicked && */}
+                    {/* <motion.div
                         className={styles.mainContainer}
                         initial={{bottom: 0}}
                         animate={{bottom: state.mediaState.matches? '70px' : '128px'}}
@@ -72,8 +72,8 @@ export default function DeckList (){
                                         </span>
                             })}
                         </div>
-                    </motion.div>
-                }
+                    </motion.div> */}
+                {/* } */}
             </AnimatePresence>
         </>
       

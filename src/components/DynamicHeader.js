@@ -28,7 +28,7 @@ export default function DynamicHeader({position}) {
                     </motion.div> 
                 }
                 </AnimatePresence>
-                <ProfileButton />
+                {/* <ProfileButton /> */}
                 <div 
                     className={styles.centeringWrapper}
                 >
